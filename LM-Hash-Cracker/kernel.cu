@@ -678,12 +678,78 @@ __device__  unsigned char * auth_DEShash( unsigned char *dst, const unsigned cha
   return( dst );
 } /* auth_DEShash */
 
+void generate64BitChar(unsigned char dest[][8], unsigned int size)
+{
+	unsigned int sizeCounter = 0;
+	unsigned int i=0,j=0,k=0,l=0,m=0,n=0,o=0,p=0;
+
+	for (; i < 256; i++)
+		for (; j < 256; j++)
+			for (; k < 256; k++)
+				for (; l < 256; l++)
+					for (; m < 256; m++)
+						for (; n < 256; n++)
+							for (; o < 256; o++)
+								for (; p < 256; p++)
+								{
+									if (sizeCounter < size)
+									{
+										for (int charCounter = 0; charCounter < 8; charCounter++)
+										{
+											switch (charCounter)
+											{
+											case 0:
+												dest[sizeCounter][charCounter] = (unsigned char) p;
+												break;
+											case 1:
+												dest[sizeCounter][charCounter] = (unsigned char) o;
+												break;
+											case 2:
+												dest[sizeCounter][charCounter] = (unsigned char) n;
+												break;
+											case 3:
+												dest[sizeCounter][charCounter] = (unsigned char) m;
+												break;
+											case 4:
+												dest[sizeCounter][charCounter] = (unsigned char) l;
+												break;
+											case 5:
+												dest[sizeCounter][charCounter] = (unsigned char) k;
+												break;
+											case 6:
+												dest[sizeCounter][charCounter] = (unsigned char) j;
+												break;
+											case 7:
+												dest[sizeCounter][charCounter] = (unsigned char) i;
+												break;
+											default:
+												break;
+											}
+										}
+										
+										sizeCounter++;
+									}
+									else
+										return;
+								}
+}
+
 int main()
 {
     const int arraySize = 1;
-	const unsigned char password[14] = {'T','E','S','T'};
+	//const unsigned char password[14] = {'T','E','S','T'};
+
+	unsigned char password[100][8];
     unsigned char hash[16];
 
+	generate64BitChar(password, 100);
+
+	for(int i = 0; i < 100; i++)
+	{
+		printf("%d .) %s ", i, password[i]);
+		printf("\n");
+	}
+	/*
     // Verschlüsselt die Passworte parallel.
 	cudaError_t cudaStatus = lmWithCuda(hash, password, arraySize);
     if (cudaStatus != cudaSuccess) {
@@ -706,7 +772,7 @@ int main()
         fprintf(stderr, "cudaDeviceReset failed!");
         return 1;
     }
-
+	*/
     return 0;
 }
 
